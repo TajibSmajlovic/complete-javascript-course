@@ -245,6 +245,7 @@ John and Mike both play basketball in different teams. In the latest 3 games, Jo
 4. EXTRA: Mary also plays basketball, and her team scored 97, 134 and 105 points. Like before, log the average winner to the console. HINT: you will need the && operator to take the decision. If you can't solve this one, just watch the solution, it's no problem :)
 5. Like before, change the scores to generate different winners, keeping in mind there might be draws. */
 
+/*
 let teamJohn = (89 + 120 + 103) / 3
 let teamMike = (116 + 94 + 123) / 3
 let teamMary = (97 + 134 + 105) / 3
@@ -258,4 +259,99 @@ if (teamJohn > teamMike && teamJohn > teamMary) {
     console.log('Mary\'s team won')
 } else {
     console.log('It is draw')
+}*/
+
+
+/************
+ * FUNCTIONS
+ ************/
+
+/*
+function calculateAge(birthYear) {
+    return 2018 - birthYear;
 }
+
+var ageJohn = calculateAge(1990);
+var ageMike = calculateAge(1948);
+var ageJane = calculateAge(1969);
+console.log(ageJohn, ageMike, ageJane);
+
+function yearsUntilRetirement(year, firstName) {
+    var age = calculateAge(year);
+    var retirement = 65 - age;
+
+    if (retirement > 0) {
+        console.log(firstName + ' retires in ' + retirement + ' years.');
+    } else {
+        console.log(firstName + ' is already retired.')
+    }
+
+}
+
+yearsUntilRetirement(1990, 'John');
+yearsUntilRetirement(1948, 'Mike');
+yearsUntilRetirement(1969, 'Jane');*/
+
+
+/*********
+ * ARRAYS
+ *********/
+
+/*
+// Initialize new array
+var names = ['John', 'Mark', 'Jane'];
+var years = new Array(1990, 1969, 1948);
+
+console.log(names[2]);
+console.log(names.length);
+
+// Mutate array data
+names[1] = 'Ben';
+names[names.length] = 'Mary';
+
+console.log(names);
+
+// Different data types
+var john = ['John', 'Smith', 1990, 'designer', false];
+
+john.push('blue');
+john.unshift('Mr.');
+
+console.log(john);
+
+john.pop();
+john.pop();
+john.shift();
+
+console.log(john);
+console.log(john.indexOf(23));
+
+var isDesigner = john.indexOf('designer') === -1 ? 'John is NOT a designer' : 'John IS a designer';
+console.log(isDesigner);*/
+
+
+/*********************
+ * CODING CHALLENGE 3
+ *********************/
+/*
+John and his family went on a holiday and went to 3 different restaurants. The bills were $124, $48 and $268.
+ To tip the waiter a fair amount, John created a simple tip calculator (as a function). He likes to tip 20% of the bill when the bill is less than $50, 15% when the bill is between $50 and $200, and 10% if the bill is more than $200.
+ In the end, John would like to have 2 arrays:
+1) Containing all three tips (one for each bill)
+2) Containing all three final paid amounts (bill + tip).
+(NOTE: To calculate 20% of a value, simply multiply it with 20/100 = 0.2)*/
+
+/*
+var finalValues = []
+var bills = [124, 48, 268].forEach((bill) => {
+    var percentage
+    if (bill < 50) {
+        percentage = .2
+    } else if (bill >= 50 && bill < 200) {
+        percentage = .15
+    } else {
+        percentage = .1
+    }
+    return finalValues.push(bill * percentage)
+})
+console.log(finalValues)*/
