@@ -6,12 +6,20 @@
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game */
 
-let scores, roundScore, activePlayer;
+/*YOUR 3 CHALLENGES
+Change the game to follow these rules:
+1. A player looses his ENTIRE score when he rolls two 6 in a row. After that, it's the next player's turn. (Hint: Always save the previous dice roll in a separate variable)
+2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100. (Hint: you can read that value with the .value property in JavaScript. This is a good oportunity to use google to figure this out :)
+3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1. (Hint: you will need CSS to position the second dice, so take a look at the CSS code for the first one.)*/
+
+let scores, roundScore, activePlayer, gamePlaying, diceRoll;
 
 let init = () => {
     scores = [0, 0]
     roundScore = 0
     activePlayer = 0
+    diceRoll = []
+    gamePlaying = true
 
     document.querySelector('.dice').style.display = 'none'
 
@@ -33,6 +41,7 @@ let init = () => {
 let nextPlayer = () => {
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0
     roundScore = 0
+    diceRoll = []
 
     document.getElementById('current-0').textContent = '0'
     document.getElementById('current-1').textContent = '0'
@@ -48,37 +57,52 @@ init()
 document.querySelector('.btn-new').addEventListener('click', init)
 
 document.querySelector('.btn-roll').addEventListener('click', () => {
-    // Random number
-    let dice = Math.floor(Math.random() * 6) + 1
+    if (gamePlaying) {
+        // Random number
+        let dice = Math.floor(Math.random() * 6) + 1
 
-    // Display the result
-    let diceDOM = document.querySelector('.dice')
-    diceDOM.style.display = 'block'
-    diceDOM.src =  `img/dice-${dice}.png`
+        // Display the result
+        let diceDOM = document.querySelector('.dice')
+        diceDOM.style.display = 'block'
+        diceDOM.src =  `img/dice-${dice}.png`
 
-    // Update the round score if the rolled number wan NOT a 1
-    if (dice !== 1) {
-        // Add score
-        roundScore += dice
-        document.querySelector(`#current-${activePlayer}`).textContent = roundScore
-    } else {
-        // Next player
-        nextPlayer()
+        // Update the round score if the rolled number wan NOT a 1 and if player rolls two 6
+        if (dice !== 1) {
+            // Add score
+            roundScore += dice
+            document.querySelector(`#current-${activePlayer}`).textContent = roundScore
+
+            diceRoll.push(dice)
+            if (diceRoll.length > 2) {
+                diceRoll.shift()
+            }
+            if (diceRoll[diceRoll.length - 2] === 6 && diceRoll[diceRoll.length - 1] === 6) {
+                scores[activePlayer] = 0
+                document.getElementById(`score-${activePlayer}`).textContent = scores[activePlayer]
+                nextPlayer()
+            }
+        } else {
+            // Next player
+            nextPlayer()
+        }
     }
 })
 
 document.querySelector('.btn-hold').addEventListener('click', () => {
-    // Add CURRENT score to GLOBAL score
-    scores[activePlayer] += roundScore
-    document.getElementById(`score-${activePlayer}`).textContent = scores[activePlayer]
+    if (gamePlaying) {
+        // Add CURRENT score to GLOBAL score
+        scores[activePlayer] += roundScore
+        document.getElementById(`score-${activePlayer}`).textContent = scores[activePlayer]
 
-    // Check if player won the game
-    if (scores[activePlayer] >= 100) {
-        document.getElementById(`name-${activePlayer}`) .textContent = 'WINNER'
-        document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner')
-        document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active')
-        document.querySelector('.dice').style.display = 'none'
-    } else {
-        nextPlayer()
+        // Check if player won the game
+        if (scores[activePlayer] >= 10) {
+            document.getElementById(`name-${activePlayer}`) .textContent = 'WINNER'
+            document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner')
+            document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active')
+            document.querySelector('.dice').style.display = 'none'
+            gamePlaying = false
+        } else {
+            nextPlayer()
+        }
     }
 })
