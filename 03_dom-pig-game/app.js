@@ -12,7 +12,7 @@ Change the game to follow these rules:
 2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100. (Hint: you can read that value with the .value property in JavaScript. This is a good oportunity to use google to figure this out :)
 3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1. (Hint: you will need CSS to position the second dice, so take a look at the CSS code for the first one.)*/
 
-let scores, roundScore, activePlayer, gamePlaying, diceRoll;
+let scores, roundScore, activePlayer, gamePlaying, diceRoll, winningScore;
 
 let init = () => {
     scores = [0, 0]
@@ -94,8 +94,17 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
         scores[activePlayer] += roundScore
         document.getElementById(`score-${activePlayer}`).textContent = scores[activePlayer]
 
+        let finalScore = document.querySelector('.final-score').value
+
+        // Undefined, 0, null or "" are COERCED to false
+        if (finalScore) {
+            winningScore = finalScore
+        } else {
+            winningScore = 100
+        }
+
         // Check if player won the game
-        if (scores[activePlayer] >= 10) {
+        if (scores[activePlayer] >= winningScore) {
             document.getElementById(`name-${activePlayer}`) .textContent = 'WINNER'
             document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner')
             document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active')
