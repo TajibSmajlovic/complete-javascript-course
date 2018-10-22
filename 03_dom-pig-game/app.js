@@ -21,7 +21,8 @@ let init = () => {
     diceRoll = []
     gamePlaying = true
 
-    document.querySelector('.dice').style.display = 'none'
+    document.getElementById('dice-1').style.display = 'none'
+    document.getElementById('dice-2').style.display = 'none'
 
     document.getElementById('score-0').textContent = '0'
     document.getElementById('current-0').textContent = '0'
@@ -49,7 +50,8 @@ let nextPlayer = () => {
     document.querySelector('.player-0-panel').classList.toggle('active')
     document.querySelector('.player-1-panel').classList.toggle('active')
 
-    document.querySelector('.dice').style.display = 'none'
+    document.getElementById('dice-1').style.display = 'none'
+    document.getElementById('dice-2').style.display = 'none'
 }
 
 init()
@@ -59,17 +61,29 @@ document.querySelector('.btn-new').addEventListener('click', init)
 document.querySelector('.btn-roll').addEventListener('click', () => {
     if (gamePlaying) {
         // Random number
-        let dice = Math.floor(Math.random() * 6) + 1
+        let dice1 = Math.floor(Math.random() * 6) + 1
+        let dice2 = Math.floor(Math.random() * 6) + 1
 
         // Display the result
-        let diceDOM = document.querySelector('.dice')
+        let diceDOM = document.getElementById('dice-1')
+        let dice2DOM = document.getElementById('dice-2')
+
         diceDOM.style.display = 'block'
-        diceDOM.src =  `img/dice-${dice}.png`
+        diceDOM.src =  `img/dice-${dice1}.png`
+        dice2DOM.style.display = 'block'
+        dice2DOM.src =  `img/dice-${dice2}.png`
 
         // Update the round score if the rolled number wan NOT a 1 and if player rolls two 6
-        if (dice !== 1) {
+        if (dice1 !== 1 && dice2 !==1) {
+            roundScore += dice1 + dice2
+            document.querySelector(`#current-${activePlayer}`).textContent = roundScore
+        } else {
+            nextPlayer()
+        }
+
+        /*if (dice !== 1) {
             // Add score
-            roundScore += dice
+            roundScore += dice + dice2
             document.querySelector(`#current-${activePlayer}`).textContent = roundScore
 
             diceRoll.push(dice)
@@ -84,7 +98,7 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
         } else {
             // Next player
             nextPlayer()
-        }
+        }*/
     }
 })
 
@@ -108,7 +122,8 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
             document.getElementById(`name-${activePlayer}`) .textContent = 'WINNER'
             document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner')
             document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active')
-            document.querySelector('.dice').style.display = 'none'
+            document.getElementById('dice-1').style.display = 'none'
+            document.getElementById('dice-2').style.display = 'none'
             gamePlaying = false
         } else {
             nextPlayer()
