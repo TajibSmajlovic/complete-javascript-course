@@ -5,6 +5,15 @@ let budgetController = (() => {
         this.id = id
         this.description = description
         this.value = value
+        this.percentage = -1
+    }
+
+    Expense.prototype.calcPercentage = function(totalIncome) {
+        totalIncome > 0 ? this.percentage = Math.round(this.value / totalIncome * 100) : this.percentage = -1
+    }
+
+    Expense.prototype.getPercentage = function() {
+        return this.percentage
     }
 
     let Income = function (id ,description, value) {
@@ -12,6 +21,7 @@ let budgetController = (() => {
         this.description = description
         this.value = value
     }
+
 
     let calculateTotal = function(type) {
         let sum = 0
@@ -40,18 +50,10 @@ let budgetController = (() => {
             let newItem, ID
 
             // Create new ID
-            if (data.allItems[type].length > 0) {
-                ID = data.allItems[type][data.allItems[type].length - 1].id + 1
-            } else {
-                ID = 0
-            }
+            data.allItems[type].length > 0 ? ID = data.allItems[type][data.allItems[type].length - 1].id + 1 : ID = 0
 
             // Create new item based on 'income' or 'expense' type
-            if (type === 'expense') {
-                newItem = new Expense(ID, des, val)
-            } else if (type === 'income') {
-                newItem = new Income(ID, des, val)
-            }
+            type === 'expense' ?  newItem = new Expense(ID, des, val) : type === 'income' ? newItem = new Income(ID, des, val) : console.log('addItem function error!')
 
             // Push it into our data structure
             data.allItems[type].push(newItem)
@@ -78,12 +80,16 @@ let budgetController = (() => {
             data.budget = data.totals.income - data.totals.expense
 
             // Calculate the percentage of income that we spent
-            if (data.totals.income > 0) {
-                data.percentage = Math.round(data.totals.expense / data.totals.income * 100)
-            } else {
-                data.percentage = -1
-            }
-
+            data.totals.income > 0 ? data.percentage = Math.round(data.totals.expense / data.totals.income * 100) : data.percentage = -1
+        },
+        calculatePercentages: function() {
+            data.allItems.expense.forEach((cur) => {
+                cur.calcPercentage(data.totals.income)
+            })
+        },
+        getPercentages: function() {
+          let allPerc = data.allItems.expense.map((cur) => cur.getPercentage())
+            return allPerc
         },
         getBudget: function() {
             return {
@@ -115,7 +121,26 @@ let UIController = ( () => {
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
-        container: '.container'
+        container: '.container',
+        expensesPercLabel: '.item__percentage'
+    }
+
+    let formatNumber = (num, type) => {
+        let numSplit, int, dec
+
+        num = Math.abs(num)
+        num = num.toFixed(2)
+
+        numSplit = num.split('.')
+
+        int = numSplit[0]
+        if (int.length > 3) {
+            int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3)
+        }
+
+        dec = numSplit[1]
+
+        return (type === 'expense' ? '-' : '+') + ' ' + int + '.' + dec
     }
 
     // noinspection JSAnnotator
@@ -144,7 +169,7 @@ let UIController = ( () => {
             // Replace the placeholder text with some actual data
             newHtml = html.replace('%id%', obj.id)
             newHtml = newHtml.replace('%description%', obj.description)
-            newHtml = newHtml.replace('%value%', obj.value)
+            newHtml = newHtml.replace('%value%', formatNumber(obj.value, type))
 
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml)
@@ -168,15 +193,27 @@ let UIController = ( () => {
             fieldsArr[0].focus()
         },
         displayBudget: function(obj) {
-            document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget + 'KM'
-            document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalIncome + 'KM'
-            document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExpense + 'KM'
+            let type
+            obj.type > 0 ? type = 'income' : type = 'expense'
 
-            if (obj.percentage > 0) {
-                document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%'
-            } else {
-                document.querySelector(DOMStrings.percentageLabel).textContent = '---'
+            document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget + 'KM'
+            document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalIncome, type) + 'KM'
+            document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExpense, type) + 'KM'
+
+            obj.percentage > 0 ? document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage : document.querySelector(DOMStrings.percentageLabel).textContent = '---'
+        },
+        displayPercentages: function(percentages) {
+            let fields = document.querySelectorAll(DOMStrings.expensesPercLabel)
+
+            let nodeListForEach = function(list, callback) {
+                for (let i = 0; i < list.length; i++) {
+                    callback(list[i], i)
+                }
             }
+
+            nodeListForEach(fields, (current, index) => {
+                percentages[index] > 0 ? current.textContent = percentages[index] + '%' : current.textContent = '---'
+            })
         },
         getDOMStrings: function () {
             return DOMStrings
@@ -214,6 +251,17 @@ let controller = ((budgetCtrl, UICtrl) => {
         UICtrl.displayBudget(budget)
     }
 
+    let updatePercentages = () => {
+        // 1. Calculate the percentages
+        budgetCtrl.calculatePercentages()
+
+        // 2. Read percentages from the budget controller
+        let percentages = budgetCtrl.getPercentages()
+
+        // 3. Update the UI with the new percentages
+        UICtrl.displayPercentages(percentages)
+    }
+
     let ctrlAddItem = () => {
         let input, newItem
 
@@ -232,6 +280,9 @@ let controller = ((budgetCtrl, UICtrl) => {
 
             // 5. Calculate and update budget
             updateBudget()
+
+            // 6. Calculate and update percentages
+            updatePercentages()
         }
     }
 
@@ -253,6 +304,9 @@ let controller = ((budgetCtrl, UICtrl) => {
 
             // 3. Update and show the new budget
             updateBudget()
+
+            // 4. Calculate and update percentages
+            updatePercentages()
         }
     }
 
