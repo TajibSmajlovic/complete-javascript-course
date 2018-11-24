@@ -122,7 +122,8 @@ let UIController = ( () => {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        expensesPercLabel: '.item__percentage'
+        expensesPercLabel: '.item__percentage',
+        dateLabel: '.budget__title--month'
     }
 
     let formatNumber = (num, type) => {
@@ -141,6 +142,12 @@ let UIController = ( () => {
         dec = numSplit[1]
 
         return (type === 'expense' ? '-' : '+') + ' ' + int + '.' + dec
+    }
+
+    let nodeListForEach = function(list, callback) {
+        for (let i = 0; i < list.length; i++) {
+            callback(list[i], i)
+        }
     }
 
     // noinspection JSAnnotator
@@ -200,20 +207,39 @@ let UIController = ( () => {
             document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalIncome, type) + 'KM'
             document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExpense, type) + 'KM'
 
-            obj.percentage > 0 ? document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage : document.querySelector(DOMStrings.percentageLabel).textContent = '---'
+            obj.percentage > 0 ? document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%' : document.querySelector(DOMStrings.percentageLabel).textContent = '---'
         },
         displayPercentages: function(percentages) {
             let fields = document.querySelectorAll(DOMStrings.expensesPercLabel)
 
-            let nodeListForEach = function(list, callback) {
-                for (let i = 0; i < list.length; i++) {
-                    callback(list[i], i)
-                }
-            }
-
             nodeListForEach(fields, (current, index) => {
                 percentages[index] > 0 ? current.textContent = percentages[index] + '%' : current.textContent = '---'
             })
+        },
+        displayMonth: function() {
+            let now, year, month, months
+
+            now = new Date()
+            year = now.getFullYear()
+
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            month = now.getMonth()
+
+            document.querySelector(DOMStrings.dateLabel).textContent = months[month] + ' ' + year
+        },
+        changedType: function() {
+            let fields
+
+            fields = document.querySelectorAll(
+                DOMStrings.inputType + ',' +
+                DOMStrings.inputDescription + ',' +
+                    DOMStrings.inputValue)
+
+            nodeListForEach(fields, (cur) => {
+                cur.classList.toggle('red-focus')
+            })
+
+            document.querySelector(DOMStrings.inputBtn).classList.toggle('red')
         },
         getDOMStrings: function () {
             return DOMStrings
@@ -238,6 +264,8 @@ let controller = ((budgetCtrl, UICtrl) => {
         })
 
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType)
     }
 
     let updateBudget = () => {
@@ -312,6 +340,7 @@ let controller = ((budgetCtrl, UICtrl) => {
 
     return {
         init: function () {
+            UICtrl.displayMonth()
             UICtrl.displayBudget({
                 budget: 0,
                 totalIncome: 0,
