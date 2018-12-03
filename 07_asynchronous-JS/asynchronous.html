@@ -25,7 +25,7 @@
         first()*/
 
 
-      function getRecipe() {
+      /*function getRecipe() {
           setTimeout(() => {
               const recipeID = [523, 883, 432, 974]
               console.log(recipeID)
@@ -41,7 +41,72 @@
               }, 1000, recipeID[2])
           }, 1500)
       }
-      getRecipe()
+      getRecipe()*/
+
+
+   /*   const getIDs = new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve([523, 883, 432, 974])
+              // reject([523, 883, 432, 974])
+          }, 1500)
+      })
+
+      const getRecipe = recID => {
+          return new Promise((resolve, reject) => {
+              setTimeout(ID => {
+                  const recipe = {title: 'Čevapčići', publisher: 'Tajib'}
+                  resolve(`${ID}: ${recipe.title}`)
+              }, 1500, recID)
+          })
+      }
+
+      const getRelated = publisher => {
+          return new Promise((resolve, reject) => {
+              setTimeout(pub => {
+                  const recipe = {title: 'Sarma', publisher};
+                  resolve(`${pub}: ${recipe.title}`)
+              }, 1500, publisher)
+          });
+      };*/
+
+      /*getIDs
+      .then(IDs => {
+          console.log(IDs);
+          return getRecipe(IDs[2])
+      })
+      .then(recipe => {
+          console.log(recipe)
+          return getRelated('Tajib Smajlović')
+      })
+      .then(recipe => {
+          console.log(recipe)
+      })
+      .catch(error => {
+          console.log('Error!!')
+      })*/
+
+
+      /*async function getRecipesAW() {
+          const IDs = await getIDs
+          console.log(IDs)
+
+          const recipe = await getRecipe(IDs[2])
+          console.log(recipe)
+
+          const related = await getRelated('Tajib Smajlović')
+          console.log(related)
+
+          return recipe
+      }
+      getRecipesAW().then(result => console.log(result))*/
+
+
+      fetch("https://crossorigin.me/https://www.metaweather.com/api/location/2487956/").then(result => {
+          console.log(result)
+          return result.json()
+      }).then(data=> {
+          console.log(data)
+      }).catch(e => console.log(e))
     </script>
 </body>
 </html>
