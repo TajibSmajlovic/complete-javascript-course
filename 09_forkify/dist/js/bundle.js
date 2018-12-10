@@ -3832,22 +3832,9 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
   !*** ./src/js/index.js ***!
   \*************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-eval("\n\nvar _test = __webpack_require__(/*! ./test */ \"./src/js/test.js\");\n\nvar _test2 = _interopRequireDefault(_test);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n// Global app controller\nconsole.log('Hello Webpack!' + _test2.default);\n\n//# sourceURL=webpack:///./src/js/index.js?");
-
-/***/ }),
-
-/***/ "./src/js/test.js":
-/*!************************!*\
-  !*** ./src/js/test.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nconsole.log('Imported module');\nexports.default = 59;\n\n//# sourceURL=webpack:///./src/js/test.js?");
+eval("throw new Error(\"Module build failed (from ./node_modules/babel-loader/lib/index.js):\\nError: [BABEL] C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\src\\\\js\\\\index.js: Invalid Option: 'last 5 versions,ie >= 8' is not a valid value for 'targets.browser'. (While processing: \\\"C:\\\\\\\\Users\\\\\\\\TajibPC\\\\\\\\Desktop\\\\\\\\09_forkify\\\\\\\\node_modules\\\\\\\\@babel\\\\\\\\preset-env\\\\\\\\lib\\\\\\\\index.js\\\")\\n    at semverifyTarget (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\preset-env\\\\lib\\\\targets-parser.js:154:11)\\n    at __default (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\preset-env\\\\lib\\\\targets-parser.js:160:92)\\n    at Object.keys.filter.sort.reduce (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\preset-env\\\\lib\\\\targets-parser.js:204:43)\\n    at Array.reduce (<anonymous>)\\n    at getTargets (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\preset-env\\\\lib\\\\targets-parser.js:192:104)\\n    at _default (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\preset-env\\\\lib\\\\index.js:187:46)\\n    at C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\helper-plugin-utils\\\\lib\\\\index.js:19:12\\n    at loadDescriptor (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\full.js:165:14)\\n    at cachedFunction (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\caching.js:33:19)\\n    at loadPresetDescriptor (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\full.js:235:63)\\n    at config.presets.reduce (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\full.js:77:21)\\n    at Array.reduce (<anonymous>)\\n    at recurseDescriptors (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\full.js:74:38)\\n    at loadFullConfig (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\config\\\\full.js:108:6)\\n    at process.nextTick (C:\\\\Users\\\\TajibPC\\\\Desktop\\\\09_forkify\\\\node_modules\\\\@babel\\\\core\\\\lib\\\\transform.js:28:33)\\n    at process._tickCallback (internal/process/next_tick.js:61:11)\");\n\n//# sourceURL=webpack:///./src/js/index.js?");
 
 /***/ }),
 
