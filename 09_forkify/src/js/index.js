@@ -40,6 +40,15 @@ elements.searchForm.addEventListener('submit', e => {
 
 })
 
+elements.searchResultPages.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if (btn) {
+        const goToPage = parseInt(btn.dataset.goto, 10)
+        searchView.clearResults()
+        searchView.renderResults(state.search.results, goToPage)
+    }
+});
+
 /*const search = new Search('pizza')
 console.log(search)
 search.getResults()*/
